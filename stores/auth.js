@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 
-// Mock user data for demonstration purposes.
 const mockUsers = [
   { id: 1, name: 'Admin User', email: 'admin@example.com', role: 'admin' },
   { id: 2, name: 'Alice', email: 'alice@example.com', role: 'user' },
@@ -9,25 +8,12 @@ const mockUsers = [
 ]
 
 export const useAuthStore = defineStore('auth', {
-  /**
-   * State: The core data of your store.
-   * - user: Stores the currently logged-in user's object. Null if not authenticated.
-   * - impersonatingUser: Stores the user object that an admin is currently impersonating.
-   *                     Null if not impersonating.
-   */
   state: () => ({
     user: null, // The authenticated user
     impersonatingUser: null, // The user being impersonated by an admin
   }),
 
-  /**
-   * Getters: Computed properties derived from the state.
-   * They are reactive and cache their results.
-   */
   getters: {
-    // Returns the user context the app should currently be operating under.
-    // If an admin is impersonating, it returns the impersonated user.
-    // Otherwise, it returns the logged-in user.
     currentUser: (state) => state.impersonatingUser || state.user,
 
     // Checks if a user is logged in.
@@ -39,14 +25,10 @@ export const useAuthStore = defineStore('auth', {
     // Checks if an admin is currently impersonating another user.
     isImpersonating: (state) => !!state.impersonatingUser,
 
-    // Provides a list of all regular users, useful for the admin's impersonation dropdown.
+    // List of regular users 
     regularUsers: () => mockUsers.filter(u => u.role === 'user'),
   },
 
-  /**
-   * Actions: Methods that can be called to modify the state.
-   * They can be asynchronous.
-   */
   actions: {
     /**
      * Logs in a user.
@@ -98,5 +80,5 @@ export const useAuthStore = defineStore('auth', {
       this.impersonatingUser = null
     },
   },
-  // persist: true,
+  persist: true,
 })
